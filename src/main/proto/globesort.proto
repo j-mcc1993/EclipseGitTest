@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "globesort";
+option java_outer_classname = "GlobeSortProto";
+
+service GlobeSort {
+  rpc Ping (Empty) returns (Empty) {}
+  rpc SortIntegers (IntArray) returns (SortResponse) {}
+}
+
+// Container for response array + computation time
+message SortResponse {
+  repeated int32 values = 1;
+  uint64 seconds = 2;
+}	
+
+message Empty { }
+
+message IntArray {
+  repeated int32 values = 1;
+}
