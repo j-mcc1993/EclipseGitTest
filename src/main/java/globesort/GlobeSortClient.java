@@ -44,13 +44,22 @@ public class GlobeSortClient {
         System.out.println("Pinging " + serverStr + "...");
         long startTime = System.nanoTime();
         serverStub.ping(Empty.newBuilder().build());
-        long seconds = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime);
-        System.out.println("Ping successful: " + seconds);
+        long milli = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+        System.out.println("Ping successful: " + milli + "ms");
 
         System.out.println("Requesting server to sort array");
         IntArray request = IntArray.newBuilder().addAllValues(Arrays.asList(values)).build();
+
+        startTime = System.nanoTime();
         SortResponse response = serverStub.sortIntegers(request);
-        System.out.println("Sorted array in: " + response.getSeconds());
+        long app_throughput = System.nanoTime() - startTime;
+        long one_way = TimeUnit.NANOSECONDS.toMillis(app_throughput - response.getSeconds());
+        double one_way_t = one_way/2.0;
+
+        app_throughput = TimeUnit.NANOSECONDS.toMillis(app_throughput);
+
+        System.out.println("Application throughput: " + app_throughput + "ms");
+        System.out.println("One-way throughput: " + one_way_t + "ms");
     }
 
     public void shutdown() throws InterruptedException {

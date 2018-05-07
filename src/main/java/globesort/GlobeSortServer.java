@@ -91,7 +91,7 @@ public class GlobeSortServer {
             Integer[] values = req.getValuesList().toArray(new Integer[req.getValuesList().size()]);
             long startTime = System.nanoTime();
             Arrays.sort(values);
-            long seconds = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime);
+            long seconds = System.nanoTime() - startTime;
             SortResponse.Builder responseBuilder = SortResponse.newBuilder();
             for(Integer val : values) {
                 responseBuilder.addValues(val);
