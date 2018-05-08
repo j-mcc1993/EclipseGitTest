@@ -12,7 +12,7 @@ service GlobeSort {
 // Container for response array + computation time
 message SortResponse {
   repeated int32 values = 1;
-  uint64 seconds = 2;
+  uint64 nanoSeconds = 2;
 }	
 
 message Empty { }

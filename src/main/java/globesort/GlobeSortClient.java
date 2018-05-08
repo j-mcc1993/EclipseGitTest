@@ -40,26 +40,34 @@ public class GlobeSortClient {
         this.serverStr = ip + ":" + port;
     }
 
-    public void run(Integer[] values) throws Exception {
+    public void run(Integer[] values, int length) throws Exception {
+        long startTime, total_time, latency, two_way_time;
+        double app_t, one_way_time;
+        
+        // Run ping
         System.out.println("Pinging " + serverStr + "...");
-        long startTime = System.nanoTime();
+        startTime = System.nanoTime();
         serverStub.ping(Empty.newBuilder().build());
-        long milli = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-        System.out.println("Ping successful: " + milli + "ms");
+        latency = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+        System.out.println("Ping successful: " + latency + "ms");
 
         System.out.println("Requesting server to sort array");
         IntArray request = IntArray.newBuilder().addAllValues(Arrays.asList(values)).build();
 
+        // Sort array
         startTime = System.nanoTime();
         SortResponse response = serverStub.sortIntegers(request);
-        long app_throughput = System.nanoTime() - startTime;
-        long one_way = TimeUnit.NANOSECONDS.toMillis(app_throughput - response.getSeconds());
-        double one_way_t = one_way/2.0;
+        total_time = System.nanoTime() - startTime;
 
-        app_throughput = TimeUnit.NANOSECONDS.toMillis(app_throughput);
+        two_way_time = 
+          TimeUnit.NANOSECONDS.toMillis(total_time - response.getNanoSeconds());
+        one_way_time = (two_way_time/2.0);
 
-        System.out.println("Application throughput: " + app_throughput + "ms");
-        System.out.println("One-way throughput: " + one_way_t + "ms");
+        app_t =
+        (double)(length/TimeUnit.NANOSECONDS.toSeconds(total_time));
+
+        System.out.println("Application throughput: " + app_t + " ints/sec");
+        System.out.println("One-way throughput: " + one_way_time + "ms");
     }
 
     public void shutdown() throws InterruptedException {
@@ -105,7 +113,7 @@ public class GlobeSortClient {
 
         GlobeSortClient client = new GlobeSortClient(cmd_args.getString("server_ip"), cmd_args.getInt("server_port"));
         try {
-            client.run(values);
+            client.run(values, cmd_args.getInt("num_values"));
         } finally {
             client.shutdown();
         }
