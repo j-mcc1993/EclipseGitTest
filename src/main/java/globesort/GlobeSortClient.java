@@ -41,8 +41,8 @@ public class GlobeSortClient {
     }
 
     public void run(Integer[] values, int length) throws Exception {
-        long startTime, total_time, latency, two_way_time;
-        double app_t, one_way_time;
+        long startTime, total_time, total_time_ms, latency, two_way_time;
+        double app_t, one_way_t;
         
         // Run ping
         System.out.println("Pinging " + serverStr + "...");
@@ -61,13 +61,19 @@ public class GlobeSortClient {
 
         two_way_time = 
           TimeUnit.NANOSECONDS.toMillis(total_time - response.getNanoSeconds());
-        one_way_time = (two_way_time/2.0);
+        one_way_t = (double)(length * 4.0)/(two_way_time / 500.0);
 
-        app_t =
-        (double)(length/TimeUnit.NANOSECONDS.toSeconds(total_time));
+        total_time_ms = TimeUnit.NANOSECONDS.toMillis(total_time);
+        if (total_time_ms == 0) {
+          app_t = -1;
+        }
+        else {
+          app_t =
+          (double)(length/(total_time_ms / 1000.0));
+        }
 
         System.out.println("Application throughput: " + app_t + " ints/sec");
-        System.out.println("One-way throughput: " + one_way_time + "ms");
+        System.out.println("One-way throughput: " + one_way_t + " bytes/sec");
     }
 
     public void shutdown() throws InterruptedException {
