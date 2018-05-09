@@ -73,7 +73,7 @@ public class GlobeSortClient {
         }
 
         System.out.println("Application throughput: " + app_t + " ints/sec");
-        System.out.println("One-way throughput: " + one_way_t + " bytes/sec");
+        System.out.println("One-way throughput: " + one_way_t + " bytes/sec\n");
     }
 
     public void shutdown() throws InterruptedException {
