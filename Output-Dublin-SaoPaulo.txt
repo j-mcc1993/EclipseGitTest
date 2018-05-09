@@ -1,0 +1,18 @@
+Pinging 18.231.174.243:8000...
+Ping successful: 1046ms
+Requesting server to sort array
+Application throughput: 136001.55430347775 ints/sec
+One-way throughput: 297967.4364158774 bytes/sec
+
+Pinging 18.231.174.243:8000...
+Ping successful: 881ms
+Requesting server to sort array
+Application throughput: 140816.7370750352 ints/sec
+One-way throughput: 298794.1521715932 bytes/sec
+
+Pinging 18.231.174.243:8000...
+Ping successful: 874ms
+Requesting server to sort array
+Application throughput: 149039.22925427157 ints/sec
+One-way throughput: 315155.60808149027 bytes/sec
+
